@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3390D637-FC7E-4358-BAA5-A4C34BEA0AB4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{72B9C7F0-BEA8-48B4-9594-5BFB7B67B6BF}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "cytoscape", "src\cytoscape\cytoscape.xproj", "{33FE4409-733B-4560-97F3-4FA344909B22}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{33FE4409-733B-4560-97F3-4FA344909B22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33FE4409-733B-4560-97F3-4FA344909B22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33FE4409-733B-4560-97F3-4FA344909B22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33FE4409-733B-4560-97F3-4FA344909B22}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{33FE4409-733B-4560-97F3-4FA344909B22} = {3390D637-FC7E-4358-BAA5-A4C34BEA0AB4}
+	EndGlobalSection
+EndGlobal
