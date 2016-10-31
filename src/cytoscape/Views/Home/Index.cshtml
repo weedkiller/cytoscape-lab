@@ -43,7 +43,6 @@
                                 'background-color': '#666666',
                                 'label': 'data(id)',
                                 'someData': 'data(someData)'
-
                             }
                         },
                         {
@@ -61,12 +60,20 @@
                         {
                             selector: '.highlighted',
                             style: {
-                                'border-color': '#ff0000',
-                                'border-width': '3'
+                                'border-color': '#666666',
+                                'background-color': '#cccccc',
+                                'border-width': '6'
                             }
                         },
                         {
                             selector: '.highlightedEdge',
+                            style: {
+                                'line-color': '#ff0000',
+                                'width': '5'
+                            }
+                        },
+                        {
+                            selector: '.normalEdge',
                             style: {
                                 'line-color': '#ff0000',
                                 'width': '5'
@@ -115,15 +122,17 @@
                                         $("#logBox").val());
                             }
                             else {
-                                $("#dbText").val(this.data('dbName'));
-                                $("#commentsBox").val(this.data('comments'));
                                 this.select();
-                                console.log(this.selected());
                             }
                         });
                 cy.$("node")
                     .on('select', function() {
                         this.addClass('highlighted');
+                        $("#dbText").val(this.data('dbName'));
+                        $("#commentsBox").val(this.data('comments'));
+                        var edges = this.neighborhood('edge');
+                        edges.stop(true, true);
+                        edges.animate({ style: { 'line-color': '#498fff', width: 6 } }, { duration: 0 });
                     });
 
                 cy.$("node")
@@ -131,22 +140,34 @@
                         this.removeClass('highlighted');
                         $("#dbText").val('');
                         $("#commentsBox").val('');
+                        var edges = this.neighborhood('edge');
+
+                        edges.animate({ style: { 'line-color': '#ccc', width: 3 } }, { duration: 0 });
                     });
 
                 cy.$("node")
                     .on('mouseover', function () {
-                        var edges = this.neighborhood('edge');
-                        edges.forEach(function(s) {
-                            s.addClass('highlightedEdge');
-                        });
+                        if (!this.selected()) {
+                            var edges = this.neighborhood('edge');
+                            edges.stop(true, false);
+                            edges.animate({ style: { 'line-color': '#498fff', width: 5 } }, { duration: 500 });
+                        }
                     });
 
                 cy.$("node")
                     .on('mouseout', function () {
+                        if (!this.selected()){
                         var edges = this.neighborhood('edge');
-                        edges.forEach(function (s) {
-                            s.removeClass('highlightedEdge');
-                        });
+                        var selectedNode = cy.nodes(function () {
+                            return this.selected();
+                        }).first();
+                        //var selectedNode = selectedNodes.first();
+                            var edgesExceptSelected = edges.filterFn(function(edge) {
+                                return !edge.anySame(selectedNode.neighborhood('edge'));
+                            });
+                        edgesExceptSelected.stop(true, false);
+                        edgesExceptSelected.animate({ style: { 'line-color': '#ccc', width: 3 } }, { duration: 500 });
+                        }
                     });
             });
     </script>
