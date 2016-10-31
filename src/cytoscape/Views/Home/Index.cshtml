@@ -24,16 +24,27 @@
                     container: document.getElementById('cy'),
                     elements: [
                         // list of graph elements to start with
-                        { data: { id: 'SwecoCore', dbName: 'SwecoDB', comments: 'some info' }, position: { x: 275, y: 225 }},
-                        { data: { id: 'Maconomy', dbName: 'SecondDB', comments: 'also some info' }, position: { x: 50, y: 400 } },
-                        { data: { id: 'HRPlus', dbName: 'thirdDB', comments: 'this is a comment' }, position: { x: 500, y: 50 } },
-                        { data: { id: 'Webbeko', dbName: 'fourthDB', comments: 'something something' }, position: { x: 500, y: 400 } },
-                        { data: { id: 'Aplus', dbName: 'fifthDB', comments: 'info about aplus' }, position: { x: 50, y: 50 } },
-                        { data: { id: 'rel_1', source: 'Maconomy', target: 'SwecoCore' } },
-                        { data: { id: 'rel_2', source: 'HRPlus', target: 'SwecoCore' } },
-                        { data: { id: 'rel_3', source: 'Webbeko', target: 'SwecoCore' } },
-                        { data: { id: 'rel_4', source: 'Aplus', target: 'SwecoCore', label: 'Ekonomidata till core' } },
-                        { data: { id: 'rel_5', source: 'Aplus', target: 'HRPlus', label: 'En till dependency' } }
+                        { data: { id: 'SwecoCore', dbName: 'SwecoDB', comments: 'some info' },  position: { x: 650, y: 200 } },
+
+                        { data: { id: 'Sweco Contact', dbName: 'SwecoDB', comments: '' },       position: { x: 300, y: 75 } },
+                        { data: { id: 'SOTS', dbName: 'SwecoDB', comments: '' },                position: { x: 300, y: 150 } },
+                        { data: { id: 'Sweco@Work', dbName: 'SwecoDB', comments: '' },          position: { x: 300, y: 225 } },
+                        { data: { id: 'PeopleAdmin', dbName: 'SwecoDB', comments: '' },         position: { x: 300, y: 300 } },
+
+                        { data: { id: 'Sweco Office', dbName: 'SwecoDB', comments: '' },         position: { x: 100, y: 75 } },
+                        { data: { id: 'Sweco Project', dbName: 'SwecoDB', comments: '' },       position: { x: 100, y: 175 } },
+                        { data: { id: 'TellUs', dbName: 'SwecoDB', comments: '' },              position: { x: 200, y: 225 } },
+                        { data: { id: 'Intranet', dbName: 'SwecoDB', comments: '' }, position: { x: 100, y: 225 } },
+                        
+                        
+                        { data: { id: 'rel_1', source: 'Sweco Office', target: 'Sweco Contact', label: 'DeskId' } },
+                        { data: { id: 'rel_2', source: 'SwecoCore', target: 'Sweco Contact', label: 'Employee Info \'url\'\nEmployee Function\nEmployeeInfo' } },
+                        { data: { id: 'rel_3', source: 'SwecoCore', target: 'SOTS', label: 'SOTS' } },
+                        { data: { id: 'rel_4', source: 'Sweco Project', target: 'Sweco@Work', label: '' } },
+                        { data: { id: 'rel_5', source: 'Sweco@Work', target: 'SwecoCore', label: '' } },
+                        { data: { id: 'rel_6', source: 'Sweco@Work', target: 'TellUs', label: 'Inquiry' } },
+                        { data: { id: 'rel_7', source: 'TellUs', target: 'Intranet', label: 'Messages' } },
+                        { data: { id: 'rel_8', source: 'PeopleAdmin', target: 'SwecoCore', label: 'Adresses\nBusinessAreas\nCompanies\Countries\nCurrencie\netc' } },
                     ],
                     style: [
                         // the stylesheet for the graph
@@ -50,11 +61,14 @@
                             style: {
                                 'width': 3,
                                 'line-color': '#ccc',
+                                'curve-style': 'bezier',
                                 'target-arrow-color': '#ccc',
                                 'target-arrow-shape': 'triangle',
                                 'label': 'data(label)',
                                 'font-size': '10px',
-                                'edge-text-rotation': 'autorotate'
+                                'edge-text-rotation': 'autorotate',
+                                'text-wrap': 'wrap',
+                                'text-max-width': '200px'
                             }
                         },
                         {
@@ -91,6 +105,10 @@
 
                 var posX;
                 var posY;
+
+                cy.nodes()[4].css("background-image", "url(images/dk.png')");
+
+                
 
                 cy.$("node")
                     .on('grab',
@@ -132,7 +150,7 @@
                         $("#commentsBox").val(this.data('comments'));
                         var edges = this.neighborhood('edge');
                         edges.stop(true, true);
-                        edges.animate({ style: { 'line-color': '#498fff', width: 6 } }, { duration: 0 });
+                        edges.animate({ style: { 'line-color': '#498fff', 'curve-style': 'bezier', 'target-arrow-color': '#498fff', width: 6 } }, { duration: 0 });
                     });
 
                 cy.$("node")
@@ -142,7 +160,7 @@
                         $("#commentsBox").val('');
                         var edges = this.neighborhood('edge');
 
-                        edges.animate({ style: { 'line-color': '#ccc', width: 3 } }, { duration: 0 });
+                        edges.animate({ style: { 'line-color': '#ccc', 'curve-style': 'bezier', 'target-arrow-color': '#ccc', width: 3 } }, { duration: 0 });
                     });
 
                 cy.$("node")
@@ -150,7 +168,7 @@
                         if (!this.selected()) {
                             var edges = this.neighborhood('edge');
                             edges.stop(true, false);
-                            edges.animate({ style: { 'line-color': '#498fff', width: 5 } }, { duration: 500 });
+                            edges.animate({ style: { 'line-color': '#498fff', 'curve-style': 'bezier', 'target-arrow-color': '#498fff', width: 5 } }, { duration: 300 });
                         }
                     });
 
@@ -166,7 +184,7 @@
                                 return !edge.anySame(selectedNode.neighborhood('edge'));
                             });
                         edgesExceptSelected.stop(true, false);
-                        edgesExceptSelected.animate({ style: { 'line-color': '#ccc', width: 3 } }, { duration: 500 });
+                        edgesExceptSelected.animate({ style: { 'line-color': '#ccc', 'curve-style': 'bezier', 'target-arrow-color': '#ccc', width: 3 } }, { duration: 300 });
                         }
                     });
             });
