@@ -1,68 +1,174 @@
-﻿@{
+﻿@using System.Runtime.InteropServices.ComTypes
+    @{
     ViewData["Title"] = "Home Page";
 }
-
-<div id="cy"></div>
-<textarea rows="10" style="width:500px" readonly id="logBox"></textarea>
-
+<div class="col-md-12">
+    <div id="cy"></div>
+    <div class="col-md-6">
+        <textarea rows="10" readonly id="logBox" style="width: 100%;"></textarea>
+    </div>
+    <div class="col-md-6">
+        <p class="col-md-2" style="margin-right: 5px">Database:</p>
+        <input class="col-md-4" type="text" readonly id="dbText" /><br /><br />
+        <p class="col-md-2" style="margin-right: 5px">Comments:</p>
+        <textarea class="col-md-4" rows="3" readonly id="commentsBox" ></textarea>
+    </div>
+</div>
 
 @section scripts{
     <script src="js/cytoscape.js"></script>
     <script>
-        $(document).ready(function() {
-            var cy = cytoscape({
-                container: document.getElementById('cy'),
-                elements: [
-                    // list of graph elements to start with
-                    { data: { id: 'SwecoCore' }, position: { x: 275, y: 225 } },
-                    { data: { id: 'Maconomy' }, position: { x: 50, y: 400 } },
-                    { data: { id: 'HRPlus' }, position: { x: 500, y: 50 } },
-                    { data: { id: 'Webbeko' }, position: { x: 500, y: 400 } },
-                    { data: { id: 'Aplus' }, position: { x: 50, y: 50 } },
-                    { data: { id: 'rel_1', source: 'Maconomy', target: 'SwecoCore' } },
-                    { data: { id: 'rel_2', source: 'HRPlus', target: 'SwecoCore' } },
-                    { data: { id: 'rel_3', source: 'Webbeko', target: 'SwecoCore' } },
-                    { data: { id: 'rel_4', source: 'Aplus', target: 'SwecoCore', label: 'Ekonomidata till core' } },
-                    { data: { id: 'rel_5', source: 'Aplus', target: 'HRPlus', label: 'asdfasdf' } }
-                ],
-                style: [
-                    // the stylesheet for the graph
-                    {
-                        selector: 'node',
-                        style: {
-                            'background-color': '#666',
-                            'label': 'data(id)'
-
+        $(document)
+            .ready(function() {
+                var cy = cytoscape({
+                    container: document.getElementById('cy'),
+                    elements: [
+                        // list of graph elements to start with
+                        { data: { id: 'SwecoCore', dbName: 'SwecoDB', comments: 'some info' }, position: { x: 275, y: 225 }},
+                        { data: { id: 'Maconomy', dbName: 'SecondDB', comments: 'also some info' }, position: { x: 50, y: 400 } },
+                        { data: { id: 'HRPlus', dbName: 'thirdDB', comments: 'this is a comment' }, position: { x: 500, y: 50 } },
+                        { data: { id: 'Webbeko', dbName: 'fourthDB', comments: 'something something' }, position: { x: 500, y: 400 } },
+                        { data: { id: 'Aplus', dbName: 'fifthDB', comments: 'info about aplus' }, position: { x: 50, y: 50 } },
+                        { data: { id: 'rel_1', source: 'Maconomy', target: 'SwecoCore' } },
+                        { data: { id: 'rel_2', source: 'HRPlus', target: 'SwecoCore' } },
+                        { data: { id: 'rel_3', source: 'Webbeko', target: 'SwecoCore' } },
+                        { data: { id: 'rel_4', source: 'Aplus', target: 'SwecoCore', label: 'Ekonomidata till core' } },
+                        { data: { id: 'rel_5', source: 'Aplus', target: 'HRPlus', label: 'En till dependency' } }
+                    ],
+                    style: [
+                        // the stylesheet for the graph
+                        {
+                            selector: 'node',
+                            style: {
+                                'background-color': '#666666',
+                                'label': 'data(id)',
+                                'someData': 'data(someData)'
+                            }
+                        },
+                        {
+                            selector: 'edge',
+                            style: {
+                                'width': 3,
+                                'line-color': '#ccc',
+                                'target-arrow-color': '#ccc',
+                                'target-arrow-shape': 'triangle',
+                                'label': 'data(label)',
+                                'font-size': '10px',
+                                'edge-text-rotation': 'autorotate'
+                            }
+                        },
+                        {
+                            selector: '.highlighted',
+                            style: {
+                                'border-color': '#666666',
+                                'background-color': '#cccccc',
+                                'border-width': '6'
+                            }
+                        },
+                        {
+                            selector: '.highlightedEdge',
+                            style: {
+                                'line-color': '#ff0000',
+                                'width': '5'
+                            }
+                        },
+                        {
+                            selector: '.normalEdge',
+                            style: {
+                                'line-color': '#ff0000',
+                                'width': '5'
+                            }
                         }
-                    },
+                    ],
+                    layout:
                     {
-                        selector: 'edge',
-                        style: {
-                            'width': 3,
-                            'line-color': '#ccc',
-                            'target-arrow-color': '#ccc',
-                            'target-arrow-shape': 'triangle',
-                            'label': 'data(label)',
-                            'font-size': '10px',
-                            'edge-text-rotation': 'autorotate'
-                        }
+                        name: 'preset'
+                        //    rows:
+                        //1
                     }
-                ],
-                layout:
-                {
-                    name: 'preset',
-                    //    rows:
-                    //1
-                }
-            });
-            console.log("cyto initialized...");
-
-            cy.$("node")
-                .on('mouseup', function() {
-                    var d = new Date();
-                    $("#logBox").val(d.getHours() + ":" + (d.getMinutes() < 10 ? "0" : "") + d.getMinutes() + ":" + (d.getSeconds() < 10 ? "0" : "") + d.getSeconds() + " - New position of " + this.id() + ": { x: " + Math.round(this.position().x) + ", y: " + Math.round(this.position().y) + "}\n" + $("#logBox").val());
-
                 });
-        });
+                console.log("cyto initialized...");
+
+                var posX;
+                var posY;
+
+                cy.$("node")
+                    .on('grab',
+                        function() {
+                            posX = this.position().x;
+                            posY = this.position().y;
+                        });
+
+                cy.$("node")
+                    .on('free',
+                        function() {
+                            if (posX !== this.position().x || posY !== this.position().y) {
+                                var d = new Date();
+                                $("#logBox")
+                                    .val(d.getHours() +
+                                        ":" +
+                                        (d.getMinutes() < 10 ? "0" : "") +
+                                        d.getMinutes() +
+                                        ":" +
+                                        (d.getSeconds() < 10 ? "0" : "") +
+                                        d.getSeconds() +
+                                        " - New position of " +
+                                        this.id() +
+                                        ": { x: " +
+                                        Math.round(this.position().x) +
+                                        ", y: " +
+                                        Math.round(this.position().y) +
+                                        "}\n" +
+                                        $("#logBox").val());
+                            }
+                            else {
+                                this.select();
+                            }
+                        });
+                cy.$("node")
+                    .on('select', function() {
+                        this.addClass('highlighted');
+                        $("#dbText").val(this.data('dbName'));
+                        $("#commentsBox").val(this.data('comments'));
+                        var edges = this.neighborhood('edge');
+                        edges.stop(true, true);
+                        edges.animate({ style: { 'line-color': '#498fff', width: 6 } }, { duration: 0 });
+                    });
+
+                cy.$("node")
+                    .on('unselect', function () {
+                        this.removeClass('highlighted');
+                        $("#dbText").val('');
+                        $("#commentsBox").val('');
+                        var edges = this.neighborhood('edge');
+
+                        edges.animate({ style: { 'line-color': '#ccc', width: 3 } }, { duration: 0 });
+                    });
+
+                cy.$("node")
+                    .on('mouseover', function () {
+                        if (!this.selected()) {
+                            var edges = this.neighborhood('edge');
+                            edges.stop(true, false);
+                            edges.animate({ style: { 'line-color': '#498fff', width: 5 } }, { duration: 500 });
+                        }
+                    });
+
+                cy.$("node")
+                    .on('mouseout', function () {
+                        if (!this.selected()){
+                        var edges = this.neighborhood('edge');
+                        var selectedNode = cy.nodes(function () {
+                            return this.selected();
+                        }).first();
+                        //var selectedNode = selectedNodes.first();
+                            var edgesExceptSelected = edges.filterFn(function(edge) {
+                                return !edge.anySame(selectedNode.neighborhood('edge'));
+                            });
+                        edgesExceptSelected.stop(true, false);
+                        edgesExceptSelected.animate({ style: { 'line-color': '#ccc', width: 3 } }, { duration: 500 });
+                        }
+                    });
+            });
     </script>
 }
